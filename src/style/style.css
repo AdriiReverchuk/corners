@@ -1,0 +1,30 @@
+table {
+   border: 1px solid #000;
+   width: 500px;
+   margin: 0 auto;
+   color: aliceblue;
+   font-size: 20px;
+}
+tr:nth-child(odd) > td:nth-child(even) {
+   background-color: rgb(63, 22, 17);
+}
+tr:nth-child(even) > td:nth-child(odd) {
+   background-color: rgb(63, 22, 17);
+}
+td {
+   border: 1px solid #000;
+   width: 50px;
+   height: 50px;
+   background-color: rgb(184, 128, 54);
+}
+td span {
+   position: relative;
+   top: 15px;
+   left: 40px;
+}
+.first-element {
+   top: 3px;
+}
+td p {
+   margin: 0;
+}
