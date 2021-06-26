@@ -12,10 +12,22 @@ export class Controller {
       const btn = document.getElementById("btn");
       btn.addEventListener("click", (event) => {
          const board = document.querySelector("table");
-         board.addEventListener("click", (event) => {
-            if (event.target.tagName === "IMG") {
-               event.target.setAttribute("draggable", "true");
-               this.posibleDropZones(event.target);
+         board.addEventListener("mousedown", (event) => {
+            const item = event.target;
+            if (item.tagName === "IMG") {
+               item.setAttribute("draggable", "true");
+               this.posibleDropZones(item);
+               item.id = "drag-item";
+               const dropZones = document.querySelectorAll(".drop-zone");
+               this.dragAndDrop(dropZones);
+               item.id = " ";
+               item.removeAttribute("draggable");
+               dropZones.forEach((element) => {
+                  element.classList.remove("drop-zone");
+               });
+               event.stopPropagation;
+               console.log(document.querySelectorAll("#drag-item"));
+               console.log(document.querySelectorAll(".drop-zone"));
             }
          });
       });
@@ -26,6 +38,9 @@ export class Controller {
             if (element.nodeName === "IMG") {
                console.log("false");
                return false;
+            } else {
+               console.log("true", "1");
+               return true;
             }
          });
       } else {
@@ -36,21 +51,29 @@ export class Controller {
    posibleDropZones(node) {
       const leftSide = node.parentNode.previousSibling.previousSibling;
       const rightSide = node.parentNode.nextSibling.nextSibling;
-      const topRow = node.parentNode.parentNode.previousSibling.previousSibling;
+      console.log(node.parentNode.parentNode);
+      let topRow;
+      if (node.parentNode.parentNode.getAttribute("data-row") !== "1") {
+         topRow = node.parentNode.parentNode.previousSibling.previousSibling;
+      }
       const bottomRow = node.parentNode.parentNode.nextSibling.nextSibling;
       let topCell;
       let bottomCell;
       if (leftSide) {
          if (this.isFreeCell(leftSide)) {
+            leftSide.classList.add("drop-zone");
             console.log("left side -true");
          } else {
             console.log("left side -false");
          }
       }
-      if (this.isFreeCell(rightSide)) {
-         console.log("right side-true");
-      } else {
-         console.log("right side -false");
+      if (rightSide) {
+         if (this.isFreeCell(rightSide)) {
+            rightSide.classList.add("drop-zone");
+            console.log("right side-true");
+         } else {
+            console.log("right side -false");
+         }
       }
       if (topRow) {
          topRow.childNodes.forEach((element) => {
@@ -76,9 +99,10 @@ export class Controller {
             }
          });
       }
-
       if (topCell) {
+         console.log(topCell);
          if (this.isFreeCell(topCell)) {
+            topCell.classList.add("drop-zone");
             console.log("top side-true");
          } else {
             console.log("top side -false");
@@ -86,10 +110,33 @@ export class Controller {
       }
       if (bottomCell) {
          if (this.isFreeCell(bottomCell)) {
+            bottomCell.classList.add("drop-zone");
             console.log("bottom side-true");
          } else {
             console.log("bottom side -false");
          }
       }
+   }
+   dragAndDrop(arrZones) {
+      const dragItem = document.getElementById("drag-item");
+      dragItem.ondragstart = this.drag;
+      arrZones.forEach((element) => {
+         element.ondragover = this.allowDrop;
+         element.ondrop = this.drop;
+      });
+   }
+   drag(event) {
+      event.dataTransfer.setData("id", event.target.id);
+   }
+   allowDrop(event) {
+      event.preventDefault();
+   }
+   drop(event) {
+      const itemId = event.dataTransfer.getData("id");
+      event.target.append(document.getElementById(itemId));
+      const dropZones = document.querySelectorAll("drop-zone");
+      dropZones.forEach((element) => {
+         element.classList.remove("drop-zone");
+      });
    }
 }
