@@ -53,6 +53,13 @@ export class View {
          });
       }
    }
+
+   removeFigures() {
+      let figures = document.querySelectorAll("img");
+      for (let i = 0; i < figures.length; i++) {
+         figures[i].remove();
+      }
+   }
    getElements(selector) {
       const elem = document.querySelectorAll(selector);
       return elem;

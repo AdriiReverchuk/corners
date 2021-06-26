@@ -43,3 +43,20 @@ td p {
 img {
    cursor: grab;
 }
+.controll {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+}
+#btn {
+   width: 10%;
+   margin: 0 auto;
+}
+.turn {
+   width: 30%;
+   margin: 0 auto;
+   text-align: center;
+}
+.drop-zone {
+   background-color: red;
+}
